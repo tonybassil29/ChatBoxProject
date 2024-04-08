@@ -1,1 +1,0 @@
-print(asmaou t chiante de ouf);
