@@ -3,36 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatBot</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Vêtements de Luxe</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #34495e;
+        }
+
+        nav {
+            background-color: #34495e;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #e67e22;
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .home-content {
+            text-align: center;
+        }
+
+        .chat-container {
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 20px;
+            overflow: hidden;
+            padding: 20px;
+            max-width: 800px; /* Ajustement de la largeur */
+            margin: 0 auto; /* Centrage horizontal */
+        }
+
+        .chat-container h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .chat-box {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #user-input:focus {
+            border-color: #2c3e50;
+        }
+
+        #send-button {
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #send-button:hover {
+            background-color: #34495e;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .option {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #34495e;
+        }
+
+        .bot-message {
+            font-weight: bold;
+            color: #000; /* Couleur noire */
+        }
+    </style>
 </head>
 <body>
-    <h1>ChatBot</h1>
-    <div id="chat-container">
-        <div id="chat-box"></div>
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
+    <header>
+        <h1 style="font-size: 36px;">Vêtements de Luxe</h1>
+    </header>
+
+    <nav>
+        <a href="#">Accueil</a>
+        <a href="#">Femmes</a>
+        <a href="#">Hommes</a>
+        <a href="#">Enfants</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <div class="container">
+        <div class="home-content">
+            <h2 style="font-size: 28px;">ChatBot</h2>
+            <p>Vous pouvez poser des questions au <span style="font-weight: bold; color: #000;">ChatBot</span> ci-dessous :</p>
+            <div class="chat-container">
+                <div class="chat-box" id="chat-box"></div>
+                <div class="message-container">
+                    <input type="text" id="user-input" placeholder="Posez votre question..." class="form-control">
+                    <button id="send-button" class="btn btn-primary" onclick="sendMessage()">Envoyer</button>
+                </div>
+            </div>
+
+            <div class="options">
+                <a href="#" class="option btn btn-primary">Nouveautés</a>
+                <a href="#" class="option btn btn-primary">Promotions</a>
+                <a href="#" class="option btn btn-primary">Guide des tailles</a>
+            </div>
+        </div>
     </div>
+
 
     <script>
         function sendMessage() {
-            var userMessage = $('#user-input').val();
-            $('#chat-box').append('<p><strong>You:</strong> ' + userMessage + '</p>');
-            $('#user-input').val('');
+            var userMessage = document.getElementById('user-input').value;
+            var chatBox = document.getElementById('chat-box');
+            var userDiv = document.createElement('div');
+            var botDiv = document.createElement('div');
 
-            $.ajax({
-                type: 'POST',
-                url: '/chatbot',
-                contentType: 'application/json',
-                data: JSON.stringify({'message': userMessage}),
-                success: function(response) {
-                    var botResponse = response['response'];
-                    $('#chat-box').append('<p><strong>ChatBot:</strong> ' + botResponse + '</p>');
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+            userDiv.classList.add('user-message');
+            userDiv.innerHTML = '<p><strong>Vous :</strong> ' + userMessage + '</p>';
+
+            chatBox.appendChild(userDiv);
+
+            // ChatBot's responses
+            var botResponse;
+            if (userMessage.toLowerCase().includes('bonjour')) {
+                botResponse = "Bonjour ! Comment puis-je vous aider ?";
+            } else if (userMessage.toLowerCase().includes('contact')) {
+                botResponse = "Vous pouvez nous contacter par e-mail à contact@notresiteweb.com ou par téléphone au 0123456789.";
+            } else if (userMessage.toLowerCase().includes('types de vêtements') || userMessage.toLowerCase().includes('types de produits')) {
+                botResponse = "Nous proposons une large gamme de vêtements de luxe, y compris des vêtements haut de gamme pour hommes, femmes et enfants.";
+            } else if (userMessage.toLowerCase().includes('livraison')) {
+                botResponse = "Nous offrons une livraison rapide et sécurisée pour toutes les commandes. Pour plus d'informations sur la livraison, veuillez consulter notre page dédiée.";
+            } else if (userMessage.toLowerCase().includes('retour')) {
+                botResponse = "Nous acceptons les retours dans les 30 jours suivant l'achat. Veuillez consulter notre politique de retour pour plus de détails.";
+            } else if (userMessage.toLowerCase().includes('nouveautés')) {
+                botResponse = "Découvrez nos dernières collections et tendances en matière de vêtements de luxe.";
+            } else if (userMessage.toLowerCase().includes('promotions')) {
+                botResponse = "Profitez de nos offres spéciales et promotions exclusives sur une sélection d'articles.";
+            } else if (userMessage.toLowerCase().includes('guide des tailles')) {
+                botResponse = "Consultez notre guide des tailles pour trouver la coupe parfaite de vos vêtements de luxe.";
+            } else if (userMessage.toLowerCase().includes('merci')) {
+                botResponse = "De rien ! N'hésitez pas à poser d'autres questions si vous en avez.";
+            } else if (userMessage.toLowerCase().includes('combien ça coûte') || userMessage.toLowerCase().includes('prix')) {
+                botResponse = "Les prix varient en fonction des articles. Vous pouvez consulter notre site Web pour voir nos prix actuels.";
+            } else if (userMessage.toLowerCase().includes('quel est votre horaire')) {
+                botResponse = "Notre boutique en ligne est ouverte 24h/24, 7j/7 pour que vous puissiez magasiner à tout moment.";
+            } else {
+                botResponse = "Désolé, je ne comprends pas. Pouvez-vous reformuler votre question ?";
+            }
+
+            botDiv.classList.add('bot-message');
+            botDiv.innerHTML = '<p><strong>ChatBot :</strong> ' + botResponse + '</p>';
+            chatBox.appendChild(botDiv);
+
+            // Clear user input after sending message
+            document.getElementById('user-input').value = '';
+
+            // Scroll to bottom of chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // If user says "merci", add a response
+            if (userMessage.toLowerCase().includes('merci')) {
+                var thankYouResponse = "Vous êtes les bienvenus ! Si vous avez besoin d'aide supplémentaire, n'hésitez pas à demander.";
+                var thankYouDiv = document.createElement('div');
+                thankYouDiv.classList.add('bot-message');
+                thankYouDiv.innerHTML = '<p><strong>ChatBot :</strong> ' + thankYouResponse + '</p>';
+                chatBox.appendChild(thankYouDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         }
     </script>
 </body>
