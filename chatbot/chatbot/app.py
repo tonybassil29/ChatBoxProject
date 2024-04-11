@@ -64,39 +64,34 @@ def chris_bot():
         if 'non' in normalized_message:
             response = "Merci d'avoir utilisé notre service de chat. Bonne journée !"
             conversation.step = 1
-            db.session.commit()
         else:
             open_faqs = OpenFAQ.query.all()
             max_keyword_matches = 0
             selected_response = "Pouvez-vous en dire plus ou poser une autre question ?"
             for open_faq in open_faqs:
                 # Normaliser et séparer les mots-clés pour cette entrée FAQ
-                keywords = normalize_text(open_faq.keywords).split(',')
-                keyword_matches = sum(keyword.strip() in normalized_message.split() for keyword in keywords)
+                keywords = [normalize_text(keyword.strip()) for keyword in open_faq.keywords.split(',')]
+                keyword_matches = sum(kw in normalized_message for kw in keywords)
                 if keyword_matches > max_keyword_matches:
                     max_keyword_matches = keyword_matches
                     selected_response = open_faq.response
             response = selected_response
+        db.session.commit()
     else:
         current_faq = FAQ.query.filter_by(step=conversation.step).first()
         if current_faq:
             expected_keywords = [normalize_text(kw.strip()) for kw in current_faq.expected_keywords.split(',')]
-            if any(keyword in normalized_message.split() for keyword in expected_keywords):
+            if any(kw in normalized_message for kw in expected_keywords):
                 conversation.step += 1
-                db.session.commit()
                 next_faq = FAQ.query.filter_by(step=conversation.step).first()
                 response = next_faq.question if next_faq else "Avez-vous d'autres questions ou des préoccupations ?"
             else:
                 response = f"Je ne suis pas sûr de comprendre. {current_faq.question}"
         else:
             response = "Je suis désolé, je n'ai pas d'autres questions. Comment puis-je vous aider ?"
+        db.session.commit()
 
     return jsonify({"response": response})
-
-
-
-
-
 
 
 @app.route('/')
@@ -144,6 +139,7 @@ def populate_db():
             question="Quels sont, selon vous, les traits les plus importants qu'un employé de fast food devrait avoir ?",
             answer="",
             expected_keywords="patience, rapidite, efficacite, amabilite, resilience, ponctualite, flexibilite, fiabilite, endurance, energie, travail pression, orientation client, esprit initiative, adaptabilite, devouement, efficience, courtoisie, dynamisme, capacite travail environnement rapide, competence interpersonnelle, fiabilite professionnelle"),
+
     ]
 
     db.session.bulk_save_objects(faq_pairs)
@@ -228,9 +224,63 @@ def populate_open_faq():
         {
             'keywords': 'communauté, social, responsabilité, impact, environnement, durable, initiatives, projets, société, contribution',
             'response': "Nous prenons notre responsabilité sociale d'entreprise très au sérieux, avec un impact positif sur la communauté et l'environnement. Nous menons plusieurs initiatives durables."
+        },
+
+        # Question 16
+        {
+            'keywords': 'uniforme, code vestimentaire, tenue, apparence, vêtements, image, professionnel, normes, consignes, uniformité',
+            'response': "Nous fournissons un uniforme et des consignes claires en matière d'apparence professionnelle pour garantir une image cohérente et professionnelle dans tous nos restaurants."
+        },
+
+        # Question 17
+        {
+            'keywords': 'politique, règlement, discipline, conduite, comportement, sanctions, respect, réglementation, normes, règles',
+            'response': "Nous avons des politiques et des règlements en place pour assurer un comportement respectueux et professionnel de la part de nos employés. Des mesures disciplinaires sont prises en cas de non-respect de ces règles."
+        },
+
+        # Question 18
+        {
+            'keywords': 'sécurité, hygiène, santé, précautions, normes, réglementation, protocoles, risques, mesures, formations',
+            'response': "La sécurité, l'hygiène et la santé de nos employés et de nos clients sont notre priorité. Nous respectons strictement les normes et réglementations en vigueur et fournissons des formations régulières sur ces sujets."
+        },
+
+        # Question 19
+        {
+            'keywords': 'feedback, évaluation, performance, suivi, rétroaction, évaluations, entretiens, progrès, amélioration, développement',
+            'response': "Nous offrons des processus d'évaluation et de rétroaction réguliers pour suivre la performance de nos employés, les aider à progresser et encourager leur développement professionnel."
+        },
+
+        # Question 20
+        {
+            'keywords': 'avantages, rabais, repas, réductions, offres, employé, gratuité, promotion, privilèges, avantages sociaux',
+            'response': "En plus d'une rémunération compétitive, nos employés bénéficient d'avantages tels que des repas gratuits ou à prix réduit, des réductions sur nos produits et d'autres privilèges."
+        },
+
+        # Question 21
+        {
+            'keywords': 'équilibre, vie professionnelle, personnelle, flexibilité, horaires, temps, famille, travail, repos, bien-être',
+            'response': "Nous comprenons l'importance d'un équilibre entre vie professionnelle et vie personnelle. Nous offrons des horaires flexibles et encourageons nos employés à prendre soin de leur bien-être."
+        },
+
+        # Question 22
+        {
+            'keywords': 'innovation, idées, suggestions, amélioration, créativité, propositions, solutions, contribution, participation, feedback',
+            'response': "Nous encourageons l'innovation et la créativité chez nos employés. Nous valorisons les idées et les suggestions qui peuvent améliorer nos opérations et nos services."
+        },
+
+        # Question 23
+        {
+            'keywords': 'divertissement, activités, événements, fêtes, célébrations, équipe, convivialité, socialisation, camaraderie, cohésion',
+            'response': "Nous organisons régulièrement des activités et des événements pour favoriser la camaraderie et renforcer l'esprit d'équipe entre nos employés."
+        },
+
+        # Question 24
+        {
+            'keywords': 'engagement, association, implication, bénévolat, volontariat, initiatives, responsabilité, soutien, solidarité, causes',
+            'response': "Nous encourageons l'engagement de nos employés dans des activités bénévoles et des initiatives communautaires. Nous soutenons les causes qui nous tiennent à cœur."
         }
 
-        # ... ajoutez autant d'entrées que nécessaire ...
+
     ]
 
     # Vérifiez si des données existent déjà pour éviter les doublons
