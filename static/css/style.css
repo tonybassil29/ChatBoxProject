@@ -4,9 +4,6 @@
     box-sizing: border-box; /* Assurez-vous que le padding et border ne dépassent pas la largeur définie */
 }
 
-
-
-
 .chat-container {
     width: 100%;
     max-width: 400px;
@@ -20,7 +17,6 @@
     position: relative; /* Si vous n'avez pas déjà positionné la chat box */
     z-index: 10; /* Assurez-vous que la chat box est au-dessus du contenu de la page */
 }
-
 
 .chat-header {
     background-color: #DA291C; /* Rouge Burger King */
@@ -40,7 +36,6 @@
     flex-direction: column;
 }
 
-
 .message {
     max-width: 80%;
     margin-bottom: 15px;
@@ -54,6 +49,7 @@
     align-self: flex-end;
     border-radius: 15px 0px 15px 15px;
     color: white;
+    padding-right: 40px; /* Ajout de marge à gauche pour décaler le message */
 }
 
 .bot-message {
@@ -61,6 +57,7 @@
     align-self: flex-start;
     border-radius: 0px 15px 15px 15px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding-left: 40px; /* Ajout de marge à gauche pour décaler le message */
 }
 
 .chat-form {
@@ -94,17 +91,6 @@
     outline: none;
 }
 
-.cv-upload-btn {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    border: none;
-}
-
-
-/* Styles pour les icônes à côté des messages */
 .icon {
     height: 24px; /* ou la taille de votre icône */
     width: 24px;  /* ou la taille de votre icône */
@@ -113,13 +99,20 @@
 
 .user-message .icon {
     position: absolute;
-    right: 10px; /* à droite du message utilisateur */
+    right: 0px; /* à droite du message utilisateur */
     bottom: 5px;
 }
 
 .bot-message .icon {
     position: absolute;
     left: 10px; /* à gauche du message bot */
+    bottom: 19px;
+}
+
+/* Style de l'icône de l'utilisateur */
+.user-message .user-icon {
+    position: absolute;
+    right: 10px; /* à droite du message utilisateur */
     bottom: 5px;
 }
 
@@ -221,6 +214,4 @@
 .navbar-logo {
     height: 50px; /* Ajustez la hauteur selon la taille de votre logo */
     width: auto; /* Cela gardera le ratio de l'image */
-
 }
-

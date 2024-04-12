@@ -1,4 +1,3 @@
-// chat.js
 document.addEventListener('DOMContentLoaded', () => {
     const chatForm = document.getElementById('chat-form');
     const chatBox = document.getElementById('chat-box');
@@ -10,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let userMessage = chatInput.value.trim();
         if(userMessage === "") return; // Do nothing if the message is empty
 
-        // Append the user's message to the chat box
+        // Append the user's message to the chat box with user icon
         let userDiv = document.createElement('div');
         userDiv.className = 'message user-message';
-        userDiv.textContent = userMessage;
+        userDiv.innerHTML = `<img src="/static/images/user-icon.png" alt="User Icon" class="icon"> <span>${userMessage}</span>`;
         chatBox.appendChild(userDiv);
 
         // Clear the input field and maintain focus
@@ -30,11 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            // Append the chatbot's response to the chat box
+           // Append the chatbot's response to the chat box with bot icon
             let botDiv = document.createElement('div');
             botDiv.className = 'message bot-message';
-            botDiv.textContent = data.response;
+            botDiv.innerHTML = `<img src="/static/images/bot-icon.png" alt="Bot Icon" class="icon"> <span>${data.response}</span>`;
             chatBox.appendChild(botDiv);
+
 
             // Auto-scroll to the latest message
             chatBox.scrollTop = chatBox.scrollHeight;

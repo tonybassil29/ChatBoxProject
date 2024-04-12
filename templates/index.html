@@ -4,14 +4,14 @@
     <title>Chatbot Chris</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body style="background-image: url('static/images/fond.jpg'); background-size: cover; background-position: center center; background-attachment: fixed; background-repeat: no-repeat;">
+<body style="background-image: url('{{ url_for('static', filename='images/fond.jpg') }}'); background-size: cover; background-position: center center; background-attachment: fixed; background-repeat: no-repeat;">
 
 <nav class="navbar">
     <div class="nav-container">
         <!-- Conteneur pour le logo à gauche -->
         <div class="navbar-brand">
             <a href="#home">
-                <img src="static/images/logo.png" alt="Logo" class="navbar-logo" /> <!-- Assurez-vous que le chemin vers le logo est correct -->
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="navbar-logo" /> <!-- Assurez-vous que le chemin vers le logo est correct -->
             </a>
         </div>
 
@@ -34,23 +34,22 @@
     </div>
 </div>
 
-    <div class="chat-container">
-        <div class="chat-header">Chat avec Chris</div>
-        <div id="chat-box">
-            <!-- La première question sera affichée ici avec l'icône du bot -->
-            <div class="message bot-message">
-                <span class="text">{{ first_question }}
-                </span>
-            </div>
-
+<div class="chat-container">
+    <div class="chat-header">Chat avec Chris</div>
+    <div id="chat-box">
+        <!-- La première question sera affichée ici avec l'icône du bot -->
+        <div class="message bot-message">
+            <img src="{{ url_for('static', filename='images/bot-icon.png') }}" alt="Bot Icon" class="icon">
+            <span class="text">{{ first_question }}</span>
         </div>
-        <form id="chat-form" class="chat-form">
-            <input type="text" name="message" id="chat-input" placeholder="Votre réponse..." required/>
-            <button type="submit" id="send-btn">
-                <i class="fas fa-paper-plane"></i> Envoyer
-            </button>
-        </form>
     </div>
-    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <form id="chat-form" class="chat-form">
+        <input type="text" name="message" id="chat-input" placeholder="Votre réponse..." required/>
+        <button type="submit" id="send-btn">
+            <i class="fas fa-paper-plane"></i> Envoyer
+        </button>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 </body>
 </html>
