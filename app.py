@@ -46,7 +46,6 @@ def normalize_text(text):
         normalized_words.append(word)
     return ' '.join(normalized_words)
 
-
 @app.route('/chris', methods=['POST'])
 def chris_bot():
     conversation = Conversation.query.first()
@@ -64,40 +63,34 @@ def chris_bot():
         if 'non' in normalized_message:
             response = "Merci d'avoir utilisé notre service de chat. Bonne journée !"
             conversation.step = 1
-            db.session.commit()
         else:
             open_faqs = OpenFAQ.query.all()
             max_keyword_matches = 0
             selected_response = "Pouvez-vous en dire plus ou poser une autre question ?"
             for open_faq in open_faqs:
                 # Normaliser et séparer les mots-clés pour cette entrée FAQ
-                keywords = normalize_text(open_faq.keywords).split(',')
-                keyword_matches = sum(keyword.strip() in normalized_message.split() for keyword in keywords)
+                keywords = [normalize_text(keyword.strip()) for keyword in open_faq.keywords.split(',')]
+                keyword_matches = sum(kw in normalized_message for kw in keywords)
                 if keyword_matches > max_keyword_matches:
                     max_keyword_matches = keyword_matches
                     selected_response = open_faq.response
             response = selected_response
+        db.session.commit()
     else:
         current_faq = FAQ.query.filter_by(step=conversation.step).first()
         if current_faq:
             expected_keywords = [normalize_text(kw.strip()) for kw in current_faq.expected_keywords.split(',')]
-            if any(keyword in normalized_message.split() for keyword in expected_keywords):
+            if any(kw in normalized_message for kw in expected_keywords):
                 conversation.step += 1
-                db.session.commit()
                 next_faq = FAQ.query.filter_by(step=conversation.step).first()
                 response = next_faq.question if next_faq else "Avez-vous d'autres questions ou des préoccupations ?"
             else:
                 response = f"Je ne suis pas sûr de comprendre. {current_faq.question}"
         else:
             response = "Je suis désolé, je n'ai pas d'autres questions. Comment puis-je vous aider ?"
+        db.session.commit()
 
     return jsonify({"response": response})
-
-
-
-
-
-
 
 @app.route('/')
 def index():
